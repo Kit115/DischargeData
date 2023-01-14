@@ -26,6 +26,32 @@ meta_info = {
 # w_pos_1 is invalid because it has too few samples
 ```
 
+## Network used:
+```
+class DischargeNet(nn.Module):
+    def __init__(self):
+        super().__init__();
+  
+        self.conv1 = nn.Conv1d(1, 32, kernel_size=7, padding=3, stride=4);
+        self.conv2 = nn.Conv1d(32, 64, kernel_size=5, padding=2, stride=3);
+        self.conv3 = nn.Conv1d(64, 128, kernel_size=3, padding=1, stride=2);
+        self.conv4 = nn.Conv1d(128, 256, kernel_size=3, padding=1, stride=2);
+        self.conv5 = nn.Conv1d(256, 512, kernel_size=3, padding=1, stride=2);
+  
+        self.fc1 = nn.Linear(512, 4);
+ 
+    def forward(self, X):
+        X = F.relu(self.conv1(X));
+        X = F.relu(self.conv2(X));
+        X = F.relu(self.conv3(X));
+        X = F.relu(self.conv4(X));
+        X = self.conv5(X);
+        X = F.avg_pool1d(X, X.shape[2]);
+        X = X.reshape(-1, 512);
+        X = self.fc1(X);
+        return X;
+```
+
 ## Method: 
 
 ### 2 Sample Adjustment (Padding) modes
